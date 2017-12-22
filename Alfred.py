@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 #Alfred
 
 #Description:
@@ -34,16 +35,27 @@ access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
 #importing packages
 from gtts import gTTS
 from weather import Weather
-import os, datetime, tweepy
+import os, datetime, tweepy, random
 
 #Getting current time 
 currentTime = datetime.datetime.now()
 #counter variable
 counter=0
+#Typical chat statements and their responces
+lets_start=["let's talk","i am bored","let's chit chat","let's chat"]
+start_phrases=["Let's talk!","Yes! Even I am bored as well.","Let's chit chat!","Let's have a nice conversation."]
+greetings = ['hola', 'hello', 'hi','hey']
+termination=["bye","goodbye","good bye","see you","tata","ta-ta","go to sleep","sleep","shutdown"]
+shutdown_phrases=["Bye!","Goodbye!","Good bye!","See you!","See you soon!","tata!","I am going to sleep now!","I'll go crash."]
+intro_phrases=["who are you?","introduce yourself","who the fuck are you?","wtf"]
+twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?","latest tweets","tweets","get tweets"]
+weather_phrases=["should i go out?","what's the weather outside?","weather","how does the weather look?","is it hot or cold?","is it hot/cold?"]
+time_phrases=["what's the time?","time please","tell me the time","may i know the time please","may i know the time","now","get time","time"]
 
+    
 def about_me():
     "This function is there to introduce me where ever the user asks."
-    text="Hello! I am "+my_name+". I am your digital assistant. I was developed by Kshithij Iyer. I am an open source software and my code is avaliable on github dot com. I was developed and distrubuted under Apache 2 point 0 licence."
+    text="Hello! I am "+my_name+". I am your digital assistant. I was developed by Kshithij Iyer. I am an open source software and my code is avaliable on github. I was developed and distrubuted under Apache 2.0 licence."
     say(text)
     text="I am always avaliable at your service."
     say(text)
@@ -54,7 +66,7 @@ def say(text):
     tts.save("best.mp3")
     os.system("mpg123 -q best.mp3")
     os.system("rm best.mp3")
-    print(text)
+    print(my_name+": "+text)
     
 def get_tweets():
     "This function gets first ten latest tweets tweeted by people who you follow on the Twitter."
@@ -74,12 +86,19 @@ def get_tweets():
             break
     say(who_all_tweeted)
     print(tweets)
+
+
 def get_weather():
     "This function gets today's weather from Yahoo Weather XML RSS feed."
     weather = Weather()
     location = weather.lookup_by_location(city)
     condition = location.condition()
     say("The weather outside is "+condition.text()+".")
+
+def get_time():
+    "This function fetches time."
+    now = datetime.datetime.now()
+    say("Today is "+now.strftime("%A, %d. %B %Y %I:%M%p"))
 
 while True:
     
@@ -99,17 +118,31 @@ while True:
         text=refer_me_as+"! Should I run the commands file?"
         say(text)
         command=input("[Yes/No]:")
-        if command.lower()=="yes":
+        if command.lower()=="yes" or command.lower()=="y" :
             text="Running commands!"
             say(text)
         else:
             text="Okay! I'll do something else."
             say(text)
-    #text="How may I help you?"
-    #say(text)
-    #command=input(">:")
-    #get_tweets()
-    #about_me()
-    break
-   
+    command=input(your_name+":")
+    command=command.replace("!","")
+    command=command.replace(".","")
+    if command.lower() in lets_start:
+        say(random.choice(start_phrases))
+    elif command.lower() in greetings:
+        say(random.choice(greetings))
+    elif command.lower() in termination:
+        say(random.choice(shutdown_phrases))
+        break;
+    elif command.lower() in intro_phrases:
+        about_me()
+    elif command.lower() in twitter_phrases:
+        get_tweets()
+    elif command.lower() in weather_phrases:
+        get_weather()
+    elif command.lower() in time_phrases:
+        get_time()
+    else:
+        text="How may I help you?"
+        say(text)
 
