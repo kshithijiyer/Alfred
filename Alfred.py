@@ -2,57 +2,114 @@
 
 #Description:
 #Insipred from the character Alfred J. Pennyworth from DC comics.
-#Alfred is personal digital assistant who will help you help you in maintaing your personal and work life.
+#Alfred is personal digital assistant who will help you in maintaing your personal and work life.
 
-#Settings
+#Developed by: Kshithij Iyer
+#Contact: ahole@disroot.org
+
+#Date when project started:19/12/2017
+#Last modification done on:22/12/2017
+
+#Settings:
+#General Settings:
+#Specify your name. The name bu which you want to be refered to.
+your_name="Kshithij"
 #Specify if you want to be specified as Sir/Madam.
 refer_me_as="Sir"
 #The name of your personal digital assistant.
 my_name="Alfred"
+#The name of the city where you live.
+city="Pune"
+
+#Twitter Settings:
+#consumer key for twitter app
+consumer_key="nh3J5DPvhezSYwInlfWVwBvDU"
+#consumer secret for twitter app
+consumer_secret="1p3IPnfWaPZEKzTza4DKnNhW5jIF7udzgJf1Tj0ulOG5mLCxmB"
+#access token for twitter app
+access_token= "796761081389662209-oI135w0wnBAiGPtM56LQarHsmkcMEI9"
+#access token secret for twitter app
+access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
 
 #importing packages
 from gtts import gTTS
-import os
-import datetime
-
+from weather import Weather
+import os, datetime, tweepy
 
 #Getting current time 
 currentTime = datetime.datetime.now()
 #counter variable
 counter=0
 
+def about_me():
+    "This function is there to introduce me where ever the user asks."
+    text="Hello! I am "+my_name+". I am your digital assistant. I was developed by Kshithij Iyer. I am an open source software and my code is avaliable on github dot com. I was developed and distrubuted under Apache 2 point 0 licence."
+    say(text)
+    text="I am always avaliable at your service."
+    say(text)
+
+def say(text):
+    "A function to make Alfred say things."
+    tts = gTTS(text, lang='en')
+    tts.save("best.mp3")
+    os.system("mpg123 -q best.mp3")
+    os.system("rm best.mp3")
+    print(text)
+    
+def get_tweets():
+    "This function gets first ten latest tweets tweeted by people who you follow on the Twitter."
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    api = tweepy.API(auth)
+    public_tweets = api.home_timeline()
+    counter,users,who_all_tweeted,tweets=0,[],"",""
+    for tweet in public_tweets:
+        users.append(tweet.user.name)
+        tweets=tweets+tweet.user.name+" : "+tweet.text+"\n"
+        counter=counter+1
+        if counter>10:
+            for user in list(set(users)):
+                who_all_tweeted=who_all_tweeted+user+", "
+            who_all_tweeted=who_all_tweeted+"tweeted the following tweets on Twitter."
+            break
+    say(who_all_tweeted)
+    print(tweets)
+def get_weather():
+    "This function gets today's weather from Yahoo Weather XML RSS feed."
+    weather = Weather()
+    location = weather.lookup_by_location(city)
+    condition = location.condition()
+    say("The weather outside is "+condition.text()+".")
 
 while True:
     
-    #initial Greetings 
+    #initial Greeting settings 
     if currentTime.hour < 12:
         Greetings="Good morning "
     elif currentTime.hour < 18:
         Greetings="Good afternoon "
     else:
         Greetings="Good evening "
-    if counter==0:
-        text=Greetings+refer_me_as+"!"+" I am "+my_name+". Your personal digital assistant."
-        print(text)
-        tts = gTTS(text, lang='en')
-        tts.save("good.mp3")
-        os.system("mpg123 -q good.mp3")
-        os.system("rm good.mp3")
-        counter=counter+1
 
-    #Awaiting commands 
-    text="How may I help you?"
-    tts = gTTS(text, lang='en')
-    tts.save("good.mp3")
-    os.system("mpg123 -q good.mp3")
-    os.system("rm good.mp3")
-    print(text)
-    command=str(input(">"))
-        
-    #running things through command terminal
-    if command.lower()=="" or command.lower()=="run command":
-        tts = gTTS("Which command you want me to execute?", lang='en')
-        tts.save("good.mp3")
-        os.system("mpg123 -q good.mp3")
-        os.system("rm good.mp3")
-        
+    if counter==0:
+        text=Greetings+refer_me_as+"!"+" I am "+my_name+". Your digital assistant."
+        say(text)
+        get_weather()
+        counter=counter+1
+        text=refer_me_as+"! Should I run the commands file?"
+        say(text)
+        command=input("[Yes/No]:")
+        if command.lower()=="yes":
+            text="Running commands!"
+            say(text)
+        else:
+            text="Okay! I'll do something else."
+            say(text)
+    #text="How may I help you?"
+    #say(text)
+    #command=input(">:")
+    #get_tweets()
+    #about_me()
+    break
+   
+
