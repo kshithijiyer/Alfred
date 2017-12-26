@@ -32,6 +32,7 @@ access_token= "796761081389662209-oI135w0wnBAiGPtM56LQarHsmkcMEI9"
 #access token secret for twitter app
 access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
 
+
 #importing packages
 from gtts import gTTS
 from weather import Weather
@@ -52,6 +53,7 @@ twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?",
 weather_phrases=["should i go out?","what's the weather outside?","weather","how does the weather look?","is it hot or cold?","is it hot/cold?"]
 time_phrases=["what's the time?","time please","tell me the time","may i know the time please","may i know the time","now","get time","time"]
 
+
     
 def about_me():
     "This function is there to introduce me where ever the user asks."
@@ -70,6 +72,7 @@ def say(text):
     
 def get_tweets():
     "This function gets first ten latest tweets tweeted by people who you follow on the Twitter."
+    #Connecting to twitter using the credentials specified above.
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
@@ -87,7 +90,21 @@ def get_tweets():
     say(who_all_tweeted)
     print(tweets)
 
-
+def get_trends():
+    "This function gets current trend based on current location from twitter."
+    #Connecting to twitter using the credentials specified above.
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    api = tweepy.API(auth)
+    all_cities= api.trends_available()
+    for one_city in all_cities:
+        if one_city['name']==city:
+            trends=api.trends_place(one_city['woeid'])
+            trends_collection = set([trend['name'] for trend in trends[0]['trends']])
+            for trend in trends_collection:
+                print(trend)
+            break
+        
 def get_weather():
     "This function gets today's weather from Yahoo Weather XML RSS feed."
     weather = Weather()
@@ -173,3 +190,4 @@ while True:
         text="How may I help you?"
         say(text)
 
+    get_trends()
