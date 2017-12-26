@@ -46,7 +46,7 @@ lets_start=["let's talk","i am bored","let's chit chat","let's chat"]
 start_phrases=["Let's talk!","Yes! Even I am bored as well.","Let's chit chat!","Let's have a nice conversation."]
 greetings = ['hola', 'hello', 'hi','hey']
 termination=["bye","goodbye","good bye","see you","tata","ta-ta","go to sleep","sleep","shutdown"]
-shutdown_phrases=["Bye!","Goodbye!","Good bye!","See you!","See you soon!","tata!","I am going to sleep now!","I'll go crash."]
+shutdown_phrases=["Bye!","Goodbye!","Good bye!","See you soon!","tata!","I am going to sleep now!","I'll go crash."]
 intro_phrases=["who are you?","introduce yourself","who the fuck are you?","wtf"]
 twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?","latest tweets","tweets","get tweets"]
 weather_phrases=["should i go out?","what's the weather outside?","weather","how does the weather look?","is it hot or cold?","is it hot/cold?"]
@@ -92,9 +92,24 @@ def get_weather():
     "This function gets today's weather from Yahoo Weather XML RSS feed."
     weather = Weather()
     location = weather.lookup_by_location(city)
-    condition = location.condition()
-    say("The weather outside is "+condition.text()+".")
+    forecasts = location.forecast()
+    for forecast in forecasts:
+        low=round((float(forecast.low())-32)/1.8,0)
+        high=round((float(forecast.high())-32)/1.8,0)
+        say("The weather outside is "+forecast.text()+". The maximum temperature is "+str(high).replace(".0","")+" degree celsius and the minimum temperature is "+str(low).replace(".0","")+" degrees celsius.")
+        break
 
+def get_weather_forecast():
+    "This function gets the weather forcast from Yahoo Weather XML RSS feed."
+    weather = Weather()
+    location = weather.lookup_by_location(city)
+    forecasts = location.forecast()
+    say("Displaying the weather forecast on the screen.")
+    for forecast in forecasts:
+        low=round((float(forecast.low())-32)/1.8,0)
+        high=round((float(forecast.high())-32)/1.8,0)
+        print("Date:"+forecast.date()+" Weather:"+forecast.text()+" Max:"+str(high).replace(".0","")+" C Min:"+str(low).replace(".0","")+" C")
+    
 def get_time():
     "This function fetches time."
     now = datetime.datetime.now()
@@ -121,6 +136,16 @@ while True:
         if command.lower()=="yes" or command.lower()=="y" :
             text="Running commands!"
             say(text)
+            commands_file=open("commands.txt")
+            while True:
+                command=commands_file.readline()
+                if(command):
+                     os.system(command)
+                else:
+                    commands_file.close()
+                    break
+            text="Done "+refer_me_as+"!"
+            say(text)
         else:
             text="Okay! I'll do something else."
             say(text)
@@ -142,6 +167,8 @@ while True:
         get_weather()
     elif command.lower() in time_phrases:
         get_time()
+    elif command.lower()=="get forecast":
+        get_weather_forecast()
     else:
         text="How may I help you?"
         say(text)
