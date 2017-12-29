@@ -52,9 +52,10 @@ intro_phrases=["who are you?","introduce yourself","who the fuck are you?","wtf"
 twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?","latest tweets","tweets","get tweets"]
 weather_phrases=["should i go out?","what's the weather outside?","weather","how does the weather look?","is it hot or cold?","is it hot/cold?"]
 time_phrases=["what's the time?","time please","tell me the time","may i know the time please","may i know the time","now","get time","time"]
+weather_forecast_phrases=["get forecast","should I go for road trip?","should I travel?","is there a storm coming?","will it rain tomorrow?","what should I wear tomorrow?"]
+twitter_trends_phrases=["get current trends","what's trending?","Whatsup on twitter?","twitter trends","trending topics","current trends now","get trends"]
+help_phrases=["How may I help you?","I am unable to understand what you want from me!","I don't have an answer for your question!","Sorry! I am not clear what you are asking me to do.","I can't do that!"]
 
-
-    
 def about_me():
     "This function is there to introduce me where ever the user asks."
     text="Hello! I am "+my_name+". I am your digital assistant. I was developed by Kshithij Iyer. I am an open source software and my code is avaliable on github. I was developed and distrubuted under Apache 2.0 licence."
@@ -92,6 +93,8 @@ def get_tweets():
 
 def get_trends():
     "This function gets current trend based on current location from twitter."
+    say("I am displaying the current trending topics on twitter on the screen.")
+    print("Trends:")
     #Connecting to twitter using the credentials specified above.
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -184,10 +187,11 @@ while True:
         get_weather()
     elif command.lower() in time_phrases:
         get_time()
-    elif command.lower()=="get forecast":
+    elif command.lower() in weather_forecast_phrases:
         get_weather_forecast()
+    elif command.lower() in twitter_trends_phrases:
+        get_trends()    
     else:
-        text="How may I help you?"
-        say(text)
+        say(random.choice(help_phrases))
 
-    get_trends()
+    
