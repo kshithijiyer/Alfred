@@ -90,6 +90,8 @@ def get_tweets():
     api = tweepy.API(auth)
     public_tweets = api.home_timeline()
     counter,users,who_all_tweeted,tweets=0,[],"",""
+
+    #Getting tweets from your home timeline and displaying them on the screen.
     for tweet in public_tweets:
         users.append(tweet.user.name)
         tweets=tweets+tweet.user.name+" : "+tweet.text+"\n"
@@ -112,6 +114,8 @@ def get_trends():
     api = tweepy.API(auth)
     all_cities= api.trends_available()
     counter=1
+
+    #Getting the current trends based on location.
     for one_city in all_cities:
         if one_city['name']==city:
             trends=api.trends_place(one_city['woeid'])
@@ -125,10 +129,13 @@ def get_trends():
         
 def post_tweet(tweet):
     "This function will be used to post status on twitter."
+
     #Connecting to twitter using the credentials specified above.
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
+
+    #Posting the tweet on twitter.
     if api.update_status(status=tweet):
         say("Tweet successfully posted on twitter.")
     else:
@@ -136,6 +143,8 @@ def post_tweet(tweet):
 
 def post_quote():
     "This funtion will post quotes i.e small posts on tumblr blogs."
+
+    #Getting post related data from user.
     say("What do you want to post "+refer_me_as+"?")
     post=input("Content:")
     say("Who said this?") 
@@ -148,6 +157,8 @@ def post_quote():
             break
         else:
             tag_list.append(tag)
+
+    #Publishing the post on tumblr.
     if client.create_quote(blog_name, state="published", quote=post, source=by, tags=tag_list):
         say("Post successfully published on your blog!")
     else:
@@ -159,6 +170,8 @@ def get_weather():
     location = weather.lookup_by_location(city)
     forecasts = location.forecast()
     for forecast in forecasts:
+
+        #Converting the temperature to C from F.
         low=round((float(forecast.low())-32)/1.8,0)
         high=round((float(forecast.high())-32)/1.8,0)
         say("The weather outside is "+forecast.text()+". The maximum temperature is "+str(high).replace(".0","")+" degree celsius and the minimum temperature is "+str(low).replace(".0","")+" degrees celsius.")
@@ -171,6 +184,8 @@ def get_weather_forecast():
     forecasts = location.forecast()
     say("Displaying the weather forecast on the screen.")
     for forecast in forecasts:
+
+        #Converting the temperature to C from F.
         low=round((float(forecast.low())-32)/1.8,0)
         high=round((float(forecast.high())-32)/1.8,0)
         print("Date:"+forecast.date()+" Weather:"+forecast.text()+" Max:"+str(high).replace(".0","")+" C Min:"+str(low).replace(".0","")+" C")
@@ -205,11 +220,14 @@ while True:
     else:
         Greetings="Good evening "
         
+    #when you start the program for the first time.    
     if counter==0:
         text=Greetings+refer_me_as+"!"+" I am "+my_name+". Your digital assistant."
         say(text)
         get_weather()
         counter=counter+1
+
+        #Running the commands which have to be executed on a daily bases.
         text=refer_me_as+"! Should I run the commands file?"
         say(text)
         command=input("[Yes/No]:")
@@ -229,10 +247,14 @@ while True:
         else:
             text="Okay! I'll do something else."
             say(text)
+            
+    #Getting commands from the user.
     command=input(your_name+":")
     command=command.replace("!","")
     command=command.replace(".","")
     command=command.lstrip()
+
+    #Calling the needed functions based on user's command.
     if command.lower() in lets_start:
         say(random.choice(start_phrases))
     elif command.lower() in greetings:
