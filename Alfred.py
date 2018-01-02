@@ -32,11 +32,20 @@ access_token= "796761081389662209-oI135w0wnBAiGPtM56LQarHsmkcMEI9"
 #access token secret for twitter app
 access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
 
-
 #importing packages
 from gtts import gTTS
 from weather import Weather
-import os, datetime, tweepy, random, wikipedia
+import os, datetime, tweepy, random, wikipedia, pytumblr
+
+#Tumblr Credentials:
+blog_name="kshithijiyer.tumblr.com"
+client = pytumblr.TumblrRestClient(
+  'GkJg77ak3iNaxRU0mRs1C5omrXhDlbU1XMBGwxS0fIwbxCVdvS',
+  'ao7SR6yIuh8De0EPOo6osNsNWOW8OIXDL8LDLPOcZJ8DCikzKf',
+  'GRZO9iCEOBZT3Rt3tqt8gKBoE2wGCAvgAK61NOrRXYouuIMBVC',
+  'TWQLPZIaCxXtDqkH91lYei5QQxHGma6QFlECTaxg65i9hsdWsd'
+)
+
 
 #Getting current time 
 currentTime = datetime.datetime.now()
@@ -125,6 +134,24 @@ def post_tweet(tweet):
     else:
         say("I was unable to post the tweet on twitter.")
 
+def post_quote():
+    "This funtion will post quotes i.e small posts on tumblr blogs."
+    say("What do you want to post "+refer_me_as+"?")
+    post=input("Content:")
+    say("Who said this?") 
+    by=input("By:")
+    tag_list=["Project Alfred"]
+    say("Please enter the hashtags for this post, type end when you are done!") 
+    while True:
+        tag=input("#")
+        if tag=="end":
+            break
+        else:
+            tag_list.append(tag)
+    if client.create_quote(blog_name, state="published", quote=post, source=by, tags=tag_list):
+        say("Post successfully published on your blog!")
+    else:
+        say("Post couldn't be published on your blog.")
 
 def get_weather():
     "This function gets today's weather from Yahoo Weather XML RSS feed."
@@ -239,7 +266,9 @@ while True:
     elif command.lower().startswith("tweet:"):
         tweet=command.replace("Tweet:","").replace("tweet:","")
         tweet=tweet+" #ProjectAlfred"
-        post_tweet(tweet)        
+        post_tweet(tweet)
+    elif command.lower()==("blog"):
+        post_quote()
     else:
         say(random.choice(help_phrases))
 
