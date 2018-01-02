@@ -9,7 +9,7 @@
 #Contact: ahole@disroot.org
 
 #Date when project started:19/12/2017
-#Last modification done on:22/12/2017
+#Last modification done on:2/1/2018
 
 #Settings:
 #General Settings:
@@ -36,7 +36,7 @@ access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
 #importing packages
 from gtts import gTTS
 from weather import Weather
-import os, datetime, tweepy, random
+import os, datetime, tweepy, random, wikipedia
 
 #Getting current time 
 currentTime = datetime.datetime.now()
@@ -53,8 +53,10 @@ twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?",
 weather_phrases=["should i go out?","what's the weather outside?","weather","how does the weather look?","is it hot or cold?","is it hot/cold?"]
 time_phrases=["what's the time?","time please","tell me the time","may i know the time please","may i know the time","now","get time","time"]
 weather_forecast_phrases=["get forecast","should I go for road trip?","should I travel?","is there a storm coming?","will it rain tomorrow?","what should I wear tomorrow?"]
-twitter_trends_phrases=["get current trends","what's trending?","Whatsup on twitter?","twitter trends","trending topics","current trends now","get trends"]
+twitter_trends_phrases=["get current trends","what's trending?","whatsup on twitter?","twitter trends","trending topics","current trends now","get trends"]
 help_phrases=["How may I help you?","I am unable to understand what you want from me!","I don't have an answer for your question!","Sorry! I am not clear what you are asking me to do.","I can't do that!"]
+suicide_detection_phrases=["i want to die","i want to kill myself","there is nothing left from me in this world","i want to quit","i quit"]
+wiki_phrases=("search","who is","what is","tell me about","where is")
 
 def about_me():
     "This function is there to introduce me where ever the user asks."
@@ -67,9 +69,10 @@ def say(text):
     "A function to make Alfred say things."
     tts = gTTS(text, lang='en')
     tts.save("best.mp3")
+    print(my_name+":"+text)
     os.system("mpg123 -q best.mp3")
     os.system("rm best.mp3")
-    print(my_name+": "+text)
+    
     
 def get_tweets():
     "This function gets first ten latest tweets tweeted by people who you follow on the Twitter."
@@ -93,19 +96,23 @@ def get_tweets():
 
 def get_trends():
     "This function gets current trend based on current location from twitter."
-    say("I am displaying the current trending topics on twitter on the screen.")
+    say("I am displaying the top ten trending topics on twitter on your screen.")
     print("Trends:")
     #Connecting to twitter using the credentials specified above.
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
     all_cities= api.trends_available()
+    counter=1
     for one_city in all_cities:
         if one_city['name']==city:
             trends=api.trends_place(one_city['woeid'])
             trends_collection = set([trend['name'] for trend in trends[0]['trends']])
             for trend in trends_collection:
                 print(trend)
+                if counter==10:
+                    break
+                counter=counter+1
             break
         
 def get_weather():
@@ -135,6 +142,21 @@ def get_time():
     now = datetime.datetime.now()
     say("Today is "+now.strftime("%A, %d. %B %Y %I:%M%p"))
 
+def prevent_suicide():
+    "This is a user suicide prevention function."
+    say("Think about your parents "+your_name+". How would they feel when they'll see you dead?")
+    say("Forget about them, what would I do without you "+refer_me_as+"?")
+    say("Suicide is not the way out "+refer_me_as+"! Stay strong! Everything will be fine. I am always there for you "+refer_me_as)
+
+def get_wiki(word):
+    "This function speaks out the wiki summary for a give word."
+    try:
+        wiki = wikipedia.summary(word)
+        say(wiki)
+    except wikipedia.exceptions.DisambiguationError as error:
+        say("The word \""+word+" can mean a lot of things. Please be specific.")
+        print(error.options)
+
 while True:
     
     #initial Greeting settings 
@@ -144,7 +166,7 @@ while True:
         Greetings="Good afternoon "
     else:
         Greetings="Good evening "
-
+        
     if counter==0:
         text=Greetings+refer_me_as+"!"+" I am "+my_name+". Your digital assistant."
         say(text)
@@ -190,7 +212,16 @@ while True:
     elif command.lower() in weather_forecast_phrases:
         get_weather_forecast()
     elif command.lower() in twitter_trends_phrases:
-        get_trends()    
+        get_trends()
+    elif command.lower() in suicide_detection_phrases:
+        prevent_suicide()
+    elif command.lower().startswith(wiki_phrases):
+        search_word=command.replace("?","")
+        search_word=search_word.lower()
+        for index in range(0,len(wiki_phrases)):
+            search_word=search_word.replace(wiki_phrases[index],"")
+        word=search_word.lstrip()
+        get_wiki(word)
     else:
         say(random.choice(help_phrases))
 
