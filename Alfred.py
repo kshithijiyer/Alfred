@@ -235,8 +235,7 @@ while True:
         word=search_word.lstrip()
         get_wiki(word)
     elif command.lower().startswith("tweet:"):
-        tweet=command.replace("Tweet:","")
-        tweet=command.replace("tweet:","")
+        tweet=command.replace("Tweet:","").replace("tweet:","")
         tweet=tweet+" #ProjectAlfred"
         post_tweet(tweet)        
     else:
