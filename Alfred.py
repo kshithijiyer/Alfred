@@ -183,8 +183,6 @@ def get_time():
 def prevent_suicide():
     "This is a user suicide prevention function."
     say("Think about your parents "+your_name+" . How would they feel when they'll see you dead?")
-    say("Will they be proud of you?")
-    say("Did they raise you for this day?")
     say("Forget about them, what would I do without you "+refer_me_as+"?")
     say("Suicide is not the way out "+refer_me_as+"! Stay strong! Everything will be fine. I am always there for you "+refer_me_as)
 
