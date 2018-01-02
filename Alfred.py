@@ -73,7 +73,6 @@ def say(text):
     os.system("mpg123 -q best.mp3")
     os.system("rm best.mp3")
     
-    
 def get_tweets():
     "This function gets first ten latest tweets tweeted by people who you follow on the Twitter."
     #Connecting to twitter using the credentials specified above.
@@ -115,6 +114,16 @@ def get_trends():
                 counter=counter+1
             break
         
+def post_tweet(tweet):
+    "This function will be used to post status on twitter."
+    #Connecting to twitter using the credentials specified above.
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    api = tweepy.API(auth)
+    status=api.update_status(status=tweet)
+    say("Tweet successfully posted on twitter.")
+
+
 def get_weather():
     "This function gets today's weather from Yahoo Weather XML RSS feed."
     weather = Weather()
@@ -140,11 +149,13 @@ def get_weather_forecast():
 def get_time():
     "This function fetches time."
     now = datetime.datetime.now()
-    say("Today is "+now.strftime("%A, %d. %B %Y %I:%M%p"))
+    say("Today is "+now.strftime("%A, %d %B %Y %I:%M%p")+".")
 
 def prevent_suicide():
     "This is a user suicide prevention function."
-    say("Think about your parents "+your_name+". How would they feel when they'll see you dead?")
+    say("Think about your parents "+your_name+" . How would they feel when they'll see you dead?")
+    say("Will they be proud of you?")
+    say("Did they raise you for this day?")
     say("Forget about them, what would I do without you "+refer_me_as+"?")
     say("Suicide is not the way out "+refer_me_as+"! Stay strong! Everything will be fine. I am always there for you "+refer_me_as)
 
@@ -194,6 +205,7 @@ while True:
     command=input(your_name+":")
     command=command.replace("!","")
     command=command.replace(".","")
+    command=command.lstrip()
     if command.lower() in lets_start:
         say(random.choice(start_phrases))
     elif command.lower() in greetings:
@@ -222,6 +234,11 @@ while True:
             search_word=search_word.replace(wiki_phrases[index],"")
         word=search_word.lstrip()
         get_wiki(word)
+    elif command.lower().startswith("tweet:"):
+        tweet=command.replace("Tweet:","")
+        tweet=command.replace("tweet:","")
+        tweet=tweet+" #ProjectAlfred"
+        post_tweet(tweet)        
     else:
         say(random.choice(help_phrases))
 
