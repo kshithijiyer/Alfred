@@ -21,6 +21,9 @@ refer_me_as="Sir"
 my_name="Alfred"
 #The name of the city where you live.
 city="Pune"
+#The number of terminals needed on startup.
+number_of_terminals=2
+
 
 #Twitter Settings:
 #consumer key for twitter app
@@ -81,7 +84,13 @@ def say(text):
     print(my_name+":"+text)
     os.system("mpg123 -q best.mp3")
     os.system("rm best.mp3")
-    
+
+def open_terminals(count):
+    "This function will be used to open a given number of terminals on a Linux system."
+    say("I'll open "+str(count)+" termianls for you to work on.")
+    for counter in range(0,count):
+        os.system("gnome-terminal")
+           
 def get_tweets():
     "This function gets first ten latest tweets tweeted by people who you follow on the Twitter."
     #Connecting to twitter using the credentials specified above.
@@ -226,7 +235,7 @@ while True:
         say(text)
         get_weather()
         counter=counter+1
-
+        open_terminals(number_of_terminals)
         #Running the commands which have to be executed on a daily bases.
         text=refer_me_as+"! Should I run the commands file?"
         say(text)
@@ -235,7 +244,6 @@ while True:
             text="Running commands!"
             say(text)
             commands_file=open("commands.txt")
-            os.system("gnome-terminal")
             while True:
                 command=commands_file.readline()
                 if(command):
