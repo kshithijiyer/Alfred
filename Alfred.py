@@ -4,6 +4,7 @@
 #Description:
 #Insipred from the character Alfred J. Pennyworth from DC comics.
 #Alfred is personal digital assistant who will help you in maintaing your personal and work life.
+#This is a application which might remind you of Jarvis from Iron Man.
 
 #Developed by: Kshithij Iyer
 #Contact: ahole@disroot.org
@@ -83,7 +84,7 @@ def say(text):
     tts.save("best.mp3")
     print(my_name+":"+text)
     os.system("mpg123 -q best.mp3")
-    os.system("rm best.mp3")
+    os.remove("best.mp3")
 
 def open_terminals(count):
     "This function will be used to open a given number of terminals on a Linux system."
@@ -188,21 +189,23 @@ def post_all_images():
     for file in glob.glob("*.jpeg"):
         print(file)
         client.create_photo(blog_name, state="published", data=file)
-        os.system("rm "+file)
+        os.remove(file)
     for file in glob.glob("*.jpg"):
         print(file)
         client.create_photo(blog_name, state="published", data=file)
-        os.system("rm "+file)
+        os.remove(file)
     for file in glob.glob("*.png"):
         print(file)
         client.create_photo(blog_name, state="published", data=file)
-        os.system("rm "+file)
+        os.remove(file)
 
     #Final termination message
     say("All images posted to your blog!")
 
 def get_weather():
     "This function gets today's weather from Yahoo Weather XML RSS feed."
+
+    #Getting weather data from Yahoo RSS.
     weather = Weather()
     location = weather.lookup_by_location(city)
     forecasts = location.forecast()
@@ -216,6 +219,8 @@ def get_weather():
 
 def get_weather_forecast():
     "This function gets the weather forcast from Yahoo Weather XML RSS feed."
+
+    #Getting weather data from Yahoo RSS.
     weather = Weather()
     location = weather.lookup_by_location(city)
     forecasts = location.forecast()
@@ -251,6 +256,13 @@ def suggest_break():
     "This function will suggest the user to take a break."
     say(refer_me_as+"! You have been working for quite long. I'll suggest you to take a break now "+refer_me_as+".")
     say("Grab a cup of coffee or tea, it will help you to focus on your work.")
+
+
+
+
+
+
+
 
 while True:
     
@@ -334,6 +346,8 @@ while True:
         post_quote()
     elif command.lower()=="post all images":
         post_all_images()
+    elif command.lower()=="open terminal":
+        open_termianls(1)
     else:
         say(random.choice(help_phrases))
 
