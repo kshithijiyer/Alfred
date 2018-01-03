@@ -9,7 +9,7 @@
 #Contact: ahole@disroot.org
 
 #Date when project started:19/12/2017
-#Last modification done on:2/1/2018
+#Last modification done on:3/1/2018
 
 #Settings:
 #General Settings:
@@ -87,7 +87,7 @@ def say(text):
 
 def open_terminals(count):
     "This function will be used to open a given number of terminals on a Linux system."
-    say("I'll open "+str(count)+" termianls for you to work on.")
+    say("I'll open "+str(count)+" terminals for you to work on.")
     for counter in range(0,count):
         os.system("gnome-terminal")
            
@@ -136,13 +136,18 @@ def get_trends():
                 counter=counter+1
             break
         
-def post_tweet(tweet):
+def post_tweet():
     "This function will be used to post status on twitter."
 
     #Connecting to twitter using the credentials specified above.
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
+
+    #Getting text for tweet
+    say("What do you want to tweet?")
+    tweet=input("Tweet:")
+    tweet=tweet+" #ProjectAlfred"
 
     #Posting the tweet on twitter.
     if api.update_status(status=tweet):
@@ -172,6 +177,26 @@ def post_quote():
         say("Post successfully published on your blog!")
     else:
         say("Post couldn't be published on your blog.")
+
+        
+def post_all_images():
+    "This function will post all the images saved under /images dir."
+    say("Posting all images to your blog.")
+    #chaning working dir
+    os.chdir("images/")
+    #Taking the images from images/ dir and posting them on the blog.
+    for file in glob.glob("*.jpeg"):
+        print(file)
+        client.create_photo(blog_name, state="published", data=file)
+    for file in glob.glob("*.jpg"):
+        print(file)
+        client.create_photo(blog_name, state="published", data=file)
+    for file in glob.glob("*.png"):
+        print(file)
+        client.create_photo(blog_name, state="published", data=file)
+
+    #Final termination message
+    say("All images posted to your blog!")
 
 def get_weather():
     "This function gets today's weather from Yahoo Weather XML RSS feed."
@@ -219,15 +244,23 @@ def get_wiki(word):
         say("The word \""+word+" can mean a lot of things. Please be specific.")
         print(error.options)
 
+def suggest_break():
+    "This function will suggest the user to take a break."
+    say(refer_me_as+"! You have been working for quite long. I'll suggest you to take a break now "+refer_me_as+".")
+    say("Grab a cup of coffee or tea, it will help you to focus on your work.")
+
 while True:
     
     #initial Greeting settings 
     if currentTime.hour < 12:
         Greetings="Good morning "
+        startTime=currentTime.hour
     elif currentTime.hour < 18:
         Greetings="Good afternoon "
+        startTime=currentTime.hour
     else:
         Greetings="Good evening "
+        startTime=currentTime.hour
         
     #when you start the program for the first time.    
     if counter==0:
@@ -261,7 +294,7 @@ while True:
     command=input(your_name+":")
     command=command.replace("!","")
     command=command.replace(".","")
-    command=command.lstrip()
+    command=command.lstrip().rstrip()
 
     #Calling the needed functions based on user's command.
     if command.lower() in lets_start:
@@ -292,13 +325,16 @@ while True:
             search_word=search_word.replace(wiki_phrases[index],"")
         word=search_word.lstrip()
         get_wiki(word)
-    elif command.lower().startswith("tweet:"):
-        tweet=command.replace("Tweet:","").replace("tweet:","")
-        tweet=tweet+" #ProjectAlfred"
-        post_tweet(tweet)
-    elif command.lower()==("blog"):
+    elif command.lower().startswith("tweet"): 
+        post_tweet()
+    elif command.lower()=="blog":
         post_quote()
+    elif command.lower()=="post all images":
+        post_all_images()
     else:
         say(random.choice(help_phrases))
 
-    
+    number_of_hours_worked=2
+    if currentTime.hour-startTime>number_of_hours_worked:
+        sugggest_break()
+        number_of_hours=number_of_hours_worked+2
