@@ -38,7 +38,7 @@ access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
 #importing packages
 from gtts import gTTS
 from weather import Weather
-import os, datetime, tweepy, random, wikipedia, pytumblr
+import os, datetime, tweepy, random, wikipedia, pytumblr, glob
 
 #Tumblr Credentials:
 blog_name="kshithijiyer.tumblr.com"
@@ -188,12 +188,15 @@ def post_all_images():
     for file in glob.glob("*.jpeg"):
         print(file)
         client.create_photo(blog_name, state="published", data=file)
+        os.system("rm "+file)
     for file in glob.glob("*.jpg"):
         print(file)
         client.create_photo(blog_name, state="published", data=file)
+        os.system("rm "+file)
     for file in glob.glob("*.png"):
         print(file)
         client.create_photo(blog_name, state="published", data=file)
+        os.system("rm "+file)
 
     #Final termination message
     say("All images posted to your blog!")
