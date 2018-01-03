@@ -257,13 +257,6 @@ def suggest_break():
     say(refer_me_as+"! You have been working for quite long. I'll suggest you to take a break now "+refer_me_as+".")
     say("Grab a cup of coffee or tea, it will help you to focus on your work.")
 
-
-
-
-
-
-
-
 while True:
     
     #initial Greeting settings 
