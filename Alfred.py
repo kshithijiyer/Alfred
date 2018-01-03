@@ -235,6 +235,7 @@ while True:
             text="Running commands!"
             say(text)
             commands_file=open("commands.txt")
+            os.system("gnome-terminal")
             while True:
                 command=commands_file.readline()
                 if(command):
