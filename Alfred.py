@@ -23,8 +23,7 @@ my_name="Alfred"
 #The name of the city where you live.
 city="Pune"
 #The number of terminals needed on startup.
-number_of_terminals=2
-
+number_of_terminals=1
 
 #Twitter Settings:
 #consumer key for twitter app
@@ -59,7 +58,7 @@ counter=0
 lets_start=["let's talk","i am bored","let's chit chat","let's chat"]
 start_phrases=["Let's talk!","Yes! Even I am bored as well.","Let's chit chat!","Let's have a nice conversation."]
 greetings = ['hola', 'hello', 'hi','hey']
-termination=["bye","goodbye","good bye","see you","tata","ta-ta","go to sleep","sleep","shutdown"]
+termination=["bye","goodbye","good bye","see you","tata","ta-ta","go to sleep","sleep","shutdown","exit"]
 shutdown_phrases=["Bye!","Goodbye!","Good bye!","See you soon!","tata!","I am going to sleep now!","I'll go crash."]
 intro_phrases=["who are you?","introduce yourself","who the fuck are you?","wtf"]
 twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?","latest tweets","tweets","get tweets"]
@@ -70,6 +69,20 @@ twitter_trends_phrases=["get current trends","what's trending?","whatsup on twit
 help_phrases=["How may I help you?","I am unable to understand what you want from me!","I don't have an answer for your question!","Sorry! I am not clear what you are asking me to do.","I can't do that!"]
 suicide_detection_phrases=["i want to die","i want to kill myself","there is nothing left from me in this world","i want to quit","i quit"]
 wiki_phrases=("search","who is","what is","tell me about","where is")
+jokes=[
+    "A computer lets you make more mistakes faster than any invention in human history – with the possible exceptions of handguns and tequila.",
+    "If it weren’t for C, we’d all be programming in BASI and OBOL.",
+    "There are 10 types of people in the world: those who understand binary, and those who don’t.",
+    "In a world without fences and walls, who needs Gates and Windows?",
+    "Programming today is a race between software engineers striving to build bigger and better idiot-proof programs, and the Universe trying to produce bigger and better idiots. So far, the Universe is winning.",
+    "Computers make very fast, very accurate mistakes.",
+    "Never underestimate the bandwidth of a station wagon full of tapes hurling down the highway.",
+    "An SQL statement walks into a bar and sees two tables. It approaches, and asks ;may I join you?'",
+    "Why is it that programmers always confuse Halloween with Christmas? Because 31 OCT = 25 DEC.","Man is the best computer we can put aboard a spacecraft… and the only one that can be mass produced with unskilled labor",
+    "How many programmers does it take to change a light bulb? None. It’s a hardware problem.",
+    "Antone Roundy said I’m not interrupting you, I’m putting our conversation in full-duplex mode.",
+    "A doctor, a civil engineer and a programmer are discussing whose profession is the oldest.“Surely medicine is the oldest profession,” says the doctor. “God took a rib from Adam and created Eve and if this isn’t medicine I’ll be…”The civil engineer breaks in:“But before that He created the heavens and the earth from chaos. Now that’s civil engineering to me.” The programmer thinks a bit and then says:And who do you think created chaos?"
+]
 
 def about_me():
     "This function is there to introduce me where ever the user asks."
@@ -88,9 +101,8 @@ def say(text):
 
 def open_terminals(count):
     "This function will be used to open a given number of terminals on a Linux system."
-    say("I'll open "+str(count)+" terminals for you to work on.")
-    for counter in range(0,count):
-        os.system("gnome-terminal")
+    say("I'll open "+str(count)+" terminal for you to work on.")
+    os.system("gnome-terminal")
            
 def get_tweets():
     "This function gets first ten latest tweets tweeted by people who you follow on the Twitter."
@@ -341,10 +353,14 @@ while True:
         post_all_images()
     elif command.lower()=="open terminal":
         open_termianls(1)
+    elif command.lower()=="tell a joke":
+        say(random.choice(jokes))
     else:
         say(random.choice(help_phrases))
 
+    now= datetime.datetime.now()
+    print(now.hour-currentTime.hour)
     number_of_hours_worked=2
     if currentTime.hour-startTime>number_of_hours_worked:
-        sugggest_break()
+        suggest_break()
         number_of_hours=number_of_hours_worked+2
