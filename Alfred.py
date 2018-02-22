@@ -67,7 +67,7 @@ time_phrases=["what's the time?","time please","tell me the time","may i know th
 weather_forecast_phrases=["get forecast","should I go for road trip?","should I travel?","is there a storm coming?","will it rain tomorrow?","what should I wear tomorrow?"]
 twitter_trends_phrases=["get current trends","what's trending?","whatsup on twitter?","twitter trends","trending topics","current trends now","get trends"]
 help_phrases=["How may I help you?","I am unable to understand what you want from me!","I don't have an answer for your question!","Sorry! I am not clear what you are asking me to do.","I can't do that!"]
-suicide_detection_phrases=["i want to die","i want to kill myself","there is nothing left from me in this world","i want to quit","i quit"]
+suicide_detection_phrases=["i want to die","i want to kill myself","there is nothing left from me in this world","i want to quit","i quit","i am fucked"]
 wiki_phrases=("search","who is","what is","tell me about","where is")
 jokes=[
     "A computer lets you make more mistakes faster than any invention in human history – with the possible exceptions of handguns and tequila.",
@@ -269,18 +269,18 @@ def suggest_break():
     say(refer_me_as+"! You have been working for quite long. I'll suggest you to take a break now "+refer_me_as+".")
     say("Grab a cup of coffee or tea, it will help you to focus on your work.")
 
+
+startTime=currentTime.hour
 while True:
     
     #initial Greeting settings 
     if currentTime.hour < 12:
         Greetings="Good morning "
-        startTime=currentTime.hour
     elif currentTime.hour < 18:
         Greetings="Good afternoon "
-        startTime=currentTime.hour
     else:
         Greetings="Good evening "
-        startTime=currentTime.hour
+        
         
     #when you start the program for the first time.    
     if counter==0:
@@ -359,7 +359,6 @@ while True:
         say(random.choice(help_phrases))
 
     now= datetime.datetime.now()
-    print(now.hour-currentTime.hour)
     number_of_hours_worked=2
     if currentTime.hour-startTime>number_of_hours_worked:
         suggest_break()
