@@ -10,7 +10,7 @@
 #Contact: ahole@disroot.org
 
 #Date when project started:19/12/2017
-#Last modification done on:3/1/2018
+#Last modification done on:22/3/2018
 
 #Settings:
 #General Settings:
@@ -61,7 +61,7 @@ greetings = ['hola', 'hello', 'hi','hey']
 termination=["bye","goodbye","good bye","see you","tata","ta-ta","go to sleep","sleep","shutdown","exit"]
 shutdown_phrases=["Bye!","Goodbye!","Good bye!","See you soon!","tata!","I am going to sleep now!","I'll go crash."]
 intro_phrases=["who are you?","introduce yourself","who the fuck are you?","wtf"]
-twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?","latest tweets","tweets","get tweets"]
+twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?","latest tweets","tweets","get tweets","Show tweets"]
 weather_phrases=["should i go out?","what's the weather outside?","weather","how does the weather look?","is it hot or cold?","is it hot/cold?"]
 time_phrases=["what's the time?","time please","tell me the time","may i know the time please","may i know the time","now","get time","time"]
 weather_forecast_phrases=["get forecast","should I go for road trip?","should I travel?","is there a storm coming?","will it rain tomorrow?","what should I wear tomorrow?"]
@@ -222,10 +222,9 @@ def get_weather():
     location = weather.lookup_by_location(city)
     forecasts = location.forecast()
     for forecast in forecasts:
-
-        #Converting the temperature to C from F.
-        low=round((float(forecast.low())-32)/1.8,0)
-        high=round((float(forecast.high())-32)/1.8,0)
+        
+        low=round(float(forecast.low()),0)
+        high=round(float(forecast.high()),0)
         say("The weather outside is "+forecast.text()+". The maximum temperature is "+str(high).replace(".0","")+" degree celsius and the minimum temperature is "+str(low).replace(".0","")+" degrees celsius.")
         break
 
@@ -239,9 +238,8 @@ def get_weather_forecast():
     say("Displaying the weather forecast on the screen.")
     for forecast in forecasts:
 
-        #Converting the temperature to C from F.
-        low=round((float(forecast.low())-32)/1.8,0)
-        high=round((float(forecast.high())-32)/1.8,0)
+        low=round(float(forecast.low()),0)
+        high=round(float(forecast.high()),0)
         print("Date:"+forecast.date()+" Weather:"+forecast.text()+" Max:"+str(high).replace(".0","")+" C Min:"+str(low).replace(".0","")+" C")
     
 def get_time():
@@ -266,13 +264,13 @@ def get_wiki(word):
 
 def suggest_break():
     "This function will suggest the user to take a break."
-    say(refer_me_as+"! You have been working for quite long. I'll suggest you to take a break now "+refer_me_as+".")
+    say(refer_me_as+", You have been working for quite long. I'll suggest you to take a break now "+refer_me_as+".")
     say("Grab a cup of coffee or tea, it will help you to focus on your work.")
 
 
 startTime=currentTime.hour
 while True:
-    
+    print(startTime)
     #initial Greeting settings 
     if currentTime.hour < 12:
         Greetings="Good morning "
@@ -290,7 +288,7 @@ while True:
         counter=counter+1
         open_terminals(number_of_terminals)
         #Running the commands which have to be executed on a daily bases.
-        text=refer_me_as+"! Should I run the commands file?"
+        text=refer_me_as+", Should I run the commands file?"
         say(text)
         command=input("[Yes/No]:")
         if command.lower()=="yes" or command.lower()=="y" :
