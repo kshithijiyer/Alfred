@@ -220,12 +220,12 @@ def get_weather():
     #Getting weather data from Yahoo RSS.
     weather = Weather()
     location = weather.lookup_by_location(city)
-    forecasts = location.forecast()
-    for forecast in forecasts:
-        
-        low=round(float(forecast.low()),0)
-        high=round(float(forecast.high()),0)
-        say("The weather outside is "+forecast.text()+". The maximum temperature is "+str(high).replace(".0","")+" degree celsius and the minimum temperature is "+str(low).replace(".0","")+" degrees celsius.")
+    forecasts = location.forecast
+    for myforecast in forecasts:
+
+        low=round(float(myforecast.low),0)
+        high=round(float(myforecast.high),0)
+        say("The weather outside is "+myforecast.text+". The maximum temperature is "+str(high).replace(".0","")+" degree celsius and the minimum temperature is "+str(low).replace(".0","")+" degrees celsius.")
         break
 
 def get_weather_forecast():
@@ -234,13 +234,13 @@ def get_weather_forecast():
     #Getting weather data from Yahoo RSS.
     weather = Weather()
     location = weather.lookup_by_location(city)
-    forecasts = location.forecast()
+    forecasts = location.forecast
     say("Displaying the weather forecast on the screen.")
     for forecast in forecasts:
 
-        low=round(float(forecast.low()),0)
-        high=round(float(forecast.high()),0)
-        print("Date:"+forecast.date()+" Weather:"+forecast.text()+" Max:"+str(high).replace(".0","")+" C Min:"+str(low).replace(".0","")+" C")
+        low=round(float(forecast.low),0)
+        high=round(float(forecast.high),0)
+        print("Date:"+forecast.date+" Weather:"+forecast.text+" Max:"+str(high).replace(".0","")+" C Min:"+str(low).replace(".0","")+" C")
     
 def get_time():
     "This function fetches time."
