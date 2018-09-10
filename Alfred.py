@@ -1,16 +1,19 @@
-#!/usr/bin/python3
-#Alfred
+#!/usr/bin/env python3
+"""
+                                    Alfred
+Description:
+Insipred from the character Alfred J. Pennyworth from DC comics.
+Alfred is personal digital assistant who will help you in maintaing your personal and work life.
+This is a application which might remind you of Jarvis from Iron Man.
 
-#Description:
-#Insipred from the character Alfred J. Pennyworth from DC comics.
-#Alfred is personal digital assistant who will help you in maintaing your personal and work life.
-#This is a application which might remind you of Jarvis from Iron Man.
 
-#Developed by: Kshithij Iyer
-#Contact: ahole@disroot.org
+Developed by: Kshithij Iyer
+Contact: ahole@disroot.org
 
-#Date when project started:19/12/2017
-#Last modification done on:22/3/2018
+Date when project started:19/12/2017
+Last modification done on:20/7/2018
+
+"""
 
 #Settings:
 #General Settings:
@@ -36,10 +39,16 @@ access_token= "796761081389662209-oI135w0wnBAiGPtM56LQarHsmkcMEI9"
 access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
 
 #importing packages
-from gtts import gTTS
-from weather import Weather
-import os, datetime, tweepy, random, wikipedia, pytumblr, glob
+try:
 
+    from gtts import gTTS
+    from weather import Weather
+    import os, datetime, tweepy, random, wikipedia, pytumblr, glob
+
+except ModuleNotFoundError:
+    print("Error:Please install packages properly!")
+    exit(1)
+    
 #Tumblr Credentials:
 blog_name="kshithijiyer.tumblr.com"
 client = pytumblr.TumblrRestClient(
@@ -268,6 +277,7 @@ def suggest_break():
     say("Grab a cup of coffee or tea, it will help you to focus on your work.")
 
 
+
 startTime=currentTime.hour
 while True:
     print(startTime)
@@ -286,7 +296,6 @@ while True:
         say(text)
         get_weather()
         counter=counter+1
-        open_terminals(number_of_terminals)
         #Running the commands which have to be executed on a daily bases.
         text=refer_me_as+", Should I run the commands file?"
         say(text)
@@ -321,7 +330,7 @@ while True:
         say(random.choice(greetings))
     elif command.lower() in termination:
         say(random.choice(shutdown_phrases))
-        break;
+        exit(0)
     elif command.lower() in intro_phrases:
         about_me()
     elif command.lower() in twitter_phrases:
@@ -355,9 +364,3 @@ while True:
         say(random.choice(jokes))
     else:
         say(random.choice(help_phrases))
-
-    now= datetime.datetime.now()
-    number_of_hours_worked=2
-    if currentTime.hour-startTime>number_of_hours_worked:
-        suggest_break()
-        number_of_hours=number_of_hours_worked+2
