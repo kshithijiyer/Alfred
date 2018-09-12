@@ -43,12 +43,11 @@ try:
 
     from gtts import gTTS
     from weather import Weather
-    import os, datetime, tweepy, random, wikipedia, pytumblr, glob
+    import os, datetime, tweepy, random, wikipedia, pytumblr, glob, signal
 
 except ModuleNotFoundError:
-    print("Error:Please install packages properly!")
+    print("Error:Packages not installed!")
     exit(1)
-    
 #Tumblr Credentials:
 blog_name="kshithijiyer.tumblr.com"
 client = pytumblr.TumblrRestClient(
@@ -74,7 +73,7 @@ twitter_phrases=["what's up on twitter?","twitter","what are my friends doing?",
 weather_phrases=["should i go out?","what's the weather outside?","weather","how does the weather look?","is it hot or cold?","is it hot/cold?"]
 time_phrases=["what's the time?","time please","tell me the time","may i know the time please","may i know the time","now","get time","time"]
 weather_forecast_phrases=["get forecast","should I go for road trip?","should I travel?","is there a storm coming?","will it rain tomorrow?","what should I wear tomorrow?"]
-twitter_trends_phrases=["get current trends","what's trending?","whatsup on twitter?","twitter trends","trending topics","current trends now","get trends"]
+twitter_trends_phrases=["get current trends","what's trending?","whatsup on twitter?","twitter trends","trending topics","current trends now","get trends","show twitter trends"]
 help_phrases=["How may I help you?","I am unable to understand what you want from me!","I don't have an answer for your question!","Sorry! I am not clear what you are asking me to do.","I can't do that!"]
 suicide_detection_phrases=["i want to die","i want to kill myself","there is nothing left from me in this world","i want to quit","i quit","i am fucked"]
 wiki_phrases=("search","who is","what is","tell me about","where is")
@@ -271,16 +270,16 @@ def get_wiki(word):
         say("The word \""+word+" can mean a lot of things. Please be specific.")
         print(error.options)
 
-def suggest_break():
+def suggest_break(signum,frame):
     "This function will suggest the user to take a break."
-    say(refer_me_as+", You have been working for quite long. I'll suggest you to take a break now "+refer_me_as+".")
+    say(refer_me_as+", You have been working for an hour. I'll suggest you to take a break now "+refer_me_as+".")
     say("Grab a cup of coffee or tea, it will help you to focus on your work.")
+    signal.alarm(0)
 
-
-
-startTime=currentTime.hour
+signal.signal(signal.SIGALRM,suggest_break)
+TIMEOUT=3600
 while True:
-    print(startTime)
+    signal.alarm(TIMEOUT)
     #initial Greeting settings 
     if currentTime.hour < 12:
         Greetings="Good morning "
