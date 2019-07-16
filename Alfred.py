@@ -11,32 +11,32 @@ Developed by: Kshithij Iyer
 Contact: ahole@disroot.org
 
 Date when project started:19/12/2017
-Last modification done on:20/7/2018
+Last modification done on:16/7/2019
 
 """
 
 #Settings:
 #General Settings:
 #Specify your name. The name bu which you want to be refered to.
-your_name="Kshithij"
+your_name=""
 #Specify if you want to be specified as Sir/Madam.
-refer_me_as="Sir"
+refer_me_as=""
 #The name of your personal digital assistant.
-my_name="Alfred"
+my_name=""
 #The name of the city where you live.
-city="Pune"
+city=""
 #The number of terminals needed on startup.
 number_of_terminals=1
 
 #Twitter Settings:
 #consumer key for twitter app
-consumer_key="nh3J5DPvhezSYwInlfWVwBvDU"
+consumer_key=""
 #consumer secret for twitter app
-consumer_secret="1p3IPnfWaPZEKzTza4DKnNhW5jIF7udzgJf1Tj0ulOG5mLCxmB"
+consumer_secret=""
 #access token for twitter app
-access_token= "796761081389662209-oI135w0wnBAiGPtM56LQarHsmkcMEI9"
+access_token= ""
 #access token secret for twitter app
-access_token_secret="37aGYc8ZPoBiSI3RarMXqflR7FKsEEjdliX1Pf7EFMSXv"
+access_token_secret=""
 
 #importing packages
 try:
@@ -49,12 +49,12 @@ except ModuleNotFoundError:
     print("Error:Packages not installed!")
     exit(1)
 #Tumblr Credentials:
-blog_name="kshithijiyer.tumblr.com"
+blog_name=""
 client = pytumblr.TumblrRestClient(
-  'GkJg77ak3iNaxRU0mRs1C5omrXhDlbU1XMBGwxS0fIwbxCVdvS',
-  'ao7SR6yIuh8De0EPOo6osNsNWOW8OIXDL8LDLPOcZJ8DCikzKf',
-  'GRZO9iCEOBZT3Rt3tqt8gKBoE2wGCAvgAK61NOrRXYouuIMBVC',
-  'TWQLPZIaCxXtDqkH91lYei5QQxHGma6QFlECTaxg65i9hsdWsd'
+  '',
+  '',
+  '',
+  ''
 )
 
 
